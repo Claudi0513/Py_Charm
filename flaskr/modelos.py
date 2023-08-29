@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow import fields
 import enum
 
 db = SQLAlchemy()
@@ -34,3 +35,18 @@ class Album(db.Model):
 
     def __repr__(self):
         return "{}-{}-{}-{}".format(self.titulo_album, self.anio, self.descripcion, self.medio)
+
+
+class AlbumSchema(SQLAlchemyAutoSchema)
+    medio = EnumADiccionario(attribute=('medio'))
+    class Meta:
+        model = Album
+        include_relationships = True
+        load_instance = True
+
+
+class EnumADiccionario(fields.Field):
+    def _serialize(self, value, attr, obj, **kwargs):
+        if value is None:
+            return None
+        return {'llave': value.name, 'valor':value.value}
